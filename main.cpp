@@ -1,5 +1,8 @@
+#define VK_USE_PLATFORM_WIN32_KHR
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include <GLFW/glfw3native.h>
 
 #include <vulkan/vulkan.h>
 
@@ -7,6 +10,7 @@
 #include <stdexcept>
 #include <cstdlib>
 #include <vector>
+#include <set>
 #include <optional>
 
 static constexpr uint32_t kWindowWidth = 800;
@@ -64,10 +68,11 @@ static void DestroyDebugUtilsMessengerEXT(
 struct QueueFamilyIndices 
 {
 	std::optional<uint32_t> graphicsFamily;
+	std::optional<uint32_t> presentFamily;
 
 	bool IsComplete() const
 	{
-		return graphicsFamily.has_value();
+		return graphicsFamily.has_value() && presentFamily.has_value();
 	}
 };
 
@@ -96,30 +101,45 @@ private:
 	{
 		CreateVkInstance();
 		SetupVkDebugMessenger();
+		CreateVkSurface();
 		PickPhysicalDevice();
 		CreateLogicalDevice();
+	}
+
+	void CreateVkSurface()
+	{
+		if (glfwCreateWindowSurface(m_vkInstance, m_window, nullptr, &m_vkSurface) != VK_SUCCESS) 
+		{
+			throw std::runtime_error("Failed to create Vulkan window surface!");
+		}
 	}
 
 	void CreateLogicalDevice() 
 	{
 		QueueFamilyIndices indices = FindQueueFamilies(m_vkPhysicalDevice);
 
-		VkDeviceQueueCreateInfo queueCreateInfo{};
-		queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-		queueCreateInfo.queueFamilyIndex = indices.graphicsFamily.value();
-		queueCreateInfo.queueCount = 1;
+		std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
+		std::set<uint32_t> uniqueQueueFamilies = { indices.graphicsFamily.value(), indices.presentFamily.value() };
 
 		// Vulkan lets you assign priorities to queues to influence the scheduling of 
 		// command buffer execution using floating point numbers between 0.0 and 1.0. 
 		// This is required even if there is only a single queue:
 		float queuePriority = 1.0f;
-		queueCreateInfo.pQueuePriorities = &queuePriority;
+		for (uint32_t queueFamily : uniqueQueueFamilies) 
+		{
+			VkDeviceQueueCreateInfo queueCreateInfo{};
+			queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+			queueCreateInfo.queueFamilyIndex = queueFamily;
+			queueCreateInfo.queueCount = 1;
+			queueCreateInfo.pQueuePriorities = &queuePriority;
+			queueCreateInfos.push_back(queueCreateInfo);
+		}
 
 		VkPhysicalDeviceFeatures deviceFeatures{};
 		VkDeviceCreateInfo createInfo{};
 		createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-		createInfo.pQueueCreateInfos = &queueCreateInfo;
-		createInfo.queueCreateInfoCount = 1;
+		createInfo.pQueueCreateInfos = queueCreateInfos.data();
+		createInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
 		createInfo.pEnabledFeatures = &deviceFeatures;
 		createInfo.enabledExtensionCount = 0;
 
@@ -140,6 +160,7 @@ private:
 
 		// Get handle to graphics queue
 		vkGetDeviceQueue(m_vkDevice, indices.graphicsFamily.value(), 0, &m_vkGraphicsQueue);
+		vkGetDeviceQueue(m_vkDevice, indices.presentFamily.value(), 0, &m_vkPresentQueue);
 	}
 
 	// Picks the first graphics card
@@ -186,6 +207,14 @@ private:
 			if (queueFamilies[i].queueFlags & VK_QUEUE_GRAPHICS_BIT)
 			{
 				indices.graphicsFamily = i;
+			}
+
+			VkBool32 presentSupport = false;
+			vkGetPhysicalDeviceSurfaceSupportKHR(device, i, m_vkSurface, &presentSupport);
+
+			if (presentSupport) 
+			{
+				indices.presentFamily = i;
 			}
 
 			if (indices.IsComplete()) break;
@@ -354,6 +383,7 @@ private:
 			DestroyDebugUtilsMessengerEXT(m_vkInstance, m_vkDebugMessenger, nullptr);
 		}
 
+		vkDestroySurfaceKHR(m_vkInstance, m_vkSurface, nullptr);
 		vkDestroyInstance(m_vkInstance, nullptr);
 
 		glfwDestroyWindow(m_window);
@@ -362,11 +392,13 @@ private:
 
 private:
 	GLFWwindow*					m_window;
+	VkSurfaceKHR				m_vkSurface;
 	VkInstance					m_vkInstance;
 	VkDebugUtilsMessengerEXT	m_vkDebugMessenger;
 	VkPhysicalDevice			m_vkPhysicalDevice = VK_NULL_HANDLE;
 	VkDevice					m_vkDevice;
 	VkQueue						m_vkGraphicsQueue;
+	VkQueue						m_vkPresentQueue;
 };
 
 int main()

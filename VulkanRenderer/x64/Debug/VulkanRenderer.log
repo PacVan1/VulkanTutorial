@@ -1,7 +1,7 @@
 ﻿  main.cpp
-C:\Projects\C++\VulkanRenderer\main.cpp(27,8): warning C4100: 'pUserData': unreferenced formal parameter
-C:\Projects\C++\VulkanRenderer\main.cpp(25,34): warning C4100: 'messageType': unreferenced formal parameter
-C:\Projects\C++\VulkanRenderer\main.cpp(24,41): warning C4100: 'messageSeverity': unreferenced formal parameter
+C:\Projects\C++\VulkanRenderer\main.cpp(31,8): warning C4100: 'pUserData': unreferenced formal parameter
+C:\Projects\C++\VulkanRenderer\main.cpp(29,34): warning C4100: 'messageType': unreferenced formal parameter
+C:\Projects\C++\VulkanRenderer\main.cpp(28,41): warning C4100: 'messageSeverity': unreferenced formal parameter
 LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
   VulkanRenderer.vcxproj -> C:\Projects\C++\VulkanRenderer\x64\Debug\VulkanRenderer.exe
   'pwsh.exe' is not recognized as an internal or external command,
