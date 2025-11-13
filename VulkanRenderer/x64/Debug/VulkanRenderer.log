@@ -1,7 +1,0 @@
-﻿  main.cpp
-C:\Projects\C++\VulkanRenderer\main.cpp(38,8): warning C4100: 'pUserData': unreferenced formal parameter
-C:\Projects\C++\VulkanRenderer\main.cpp(36,34): warning C4100: 'messageType': unreferenced formal parameter
-C:\Projects\C++\VulkanRenderer\main.cpp(35,41): warning C4100: 'messageSeverity': unreferenced formal parameter
-  VulkanRenderer.vcxproj -> C:\Projects\C++\VulkanRenderer\x64\Debug\VulkanRenderer.exe
-  'pwsh.exe' is not recognized as an internal or external command,
-  operable program or batch file.
