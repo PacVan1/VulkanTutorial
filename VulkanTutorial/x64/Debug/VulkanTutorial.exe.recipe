@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Projects\C++\VulkanRenderer\x64\Debug\VulkanTutorial.exe</FullPath>
+      <FullPath>C:\Projects\C++\VulkanTutorial\x64\Debug\VulkanTutorial.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

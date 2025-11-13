@@ -1,0 +1,11 @@
+﻿  main.cpp
+C:\Projects\C++\VulkanTutorial\main.cpp(42,8): warning C4100: 'pUserData': unreferenced formal parameter
+C:\Projects\C++\VulkanTutorial\main.cpp(40,34): warning C4100: 'messageType': unreferenced formal parameter
+C:\Projects\C++\VulkanTutorial\main.cpp(39,41): warning C4100: 'messageSeverity': unreferenced formal parameter
+C:\Projects\C++\VulkanTutorial\main.cpp(434,57): warning C4267: '=': conversion from 'size_t' to 'uint32_t', possible loss of data
+C:\Projects\C++\VulkanTutorial\main.cpp(576,79): warning C4267: '=': conversion from 'size_t' to 'uint32_t', possible loss of data
+C:\Projects\C++\VulkanTutorial\main.cpp(1207,74): warning C4100: 'height': unreferenced formal parameter
+C:\Projects\C++\VulkanTutorial\main.cpp(1207,63): warning C4100: 'width': unreferenced formal parameter
+  VulkanTutorial.vcxproj -> C:\Projects\C++\VulkanTutorial\x64\Debug\VulkanTutorial.exe
+  'pwsh.exe' is not recognized as an internal or external command,
+  operable program or batch file.
