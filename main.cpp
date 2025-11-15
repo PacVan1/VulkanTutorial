@@ -1893,8 +1893,6 @@ private:
 			vkFreeMemory(m_vkDevice, m_uniformBuffersMemory[i], nullptr);
 		}
 
-		vkDestroyDescriptorSetLayout(m_vkDevice, m_vkDescriptorSetLayout, nullptr);
-
 		vkDestroyBuffer(m_vkDevice, m_indexBuffer, nullptr);
 		vkFreeMemory(m_vkDevice, m_indexBufferMemory, nullptr);
 
